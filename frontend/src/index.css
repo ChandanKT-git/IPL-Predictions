@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'Manrope', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #0A0A0A;
+    color: #FFFFFF;
+    min-height: 100vh;
+}
+
+@layer base {
+    :root {
+        --background: 0 0% 4%;
+        --foreground: 0 0% 100%;
+        --card: 0 0% 8%;
+        --card-foreground: 0 0% 100%;
+        --popover: 0 0% 6%;
+        --popover-foreground: 0 0% 100%;
+        --primary: 4 100% 59%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 0 0% 14%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 0 0% 14%;
+        --muted-foreground: 0 0% 64%;
+        --accent: 4 100% 59%;
+        --accent-foreground: 0 0% 100%;
+        --destructive: 0 70% 50%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 0 0% 18%;
+        --input: 0 0% 14%;
+        --ring: 4 100% 59%;
+        --radius: 0.625rem;
+    }
+}
+
+@layer base {
+    * { @apply border-border; }
+    html, body, #root { @apply bg-background text-foreground; }
+    h1, h2, h3, h4 { font-family: 'Oswald', sans-serif; letter-spacing: -0.01em; }
+}
+
+/* Selection */
+::selection {
+    background: rgba(255, 59, 48, 0.4);
+    color: #fff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0A0A0A; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #FF3B30; }
+
+/* Stadium hero overlay */
+.stadium-hero {
+    background-image:
+        linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.85) 60%, rgba(10,10,10,1) 100%),
+        url('https://images.pexels.com/photos/36741130/pexels-photo-36741130.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Grain overlay */
+.grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/></svg>");
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* Glassmorphic chrome */
+.glass {
+    background: rgba(20, 20, 20, 0.55);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Card hover lift */
+.card-lift {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                background-color 0.3s ease;
+}
+.card-lift:hover { transform: translateY(-4px); }
+
+/* Stagger entrance */
+.stagger > * { animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger > *:nth-child(3) { animation-delay: 0.16s; }
+.stagger > *:nth-child(4) { animation-delay: 0.22s; }
+.stagger > *:nth-child(5) { animation-delay: 0.28s; }
+.stagger > *:nth-child(6) { animation-delay: 0.34s; }
+
+@keyframes fade-up {
+    0% { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* IPL field stripes pattern */
+.field-stripes {
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0.05) 0 24px,
+        rgba(16, 185, 129, 0.10) 24px 48px
+    );
+}
+
+/* Slider track override (radix) */
+[data-orientation="horizontal"][role="slider"]:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.25);
+}
+
+/* Marquee */
+.marquee {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 28s linear infinite;
+}
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* Number ticker */
+.tabular { font-variant-numeric: tabular-nums; }
