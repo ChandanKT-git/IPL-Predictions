@@ -6,11 +6,14 @@ services:
   - type: web
     name: ipl-backend
     runtime: python
+    plan: free
     buildCommand: cd backend && pip install -r requirements.txt
     startCommand: cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
       - key: CRICBUZZ_API_KEY
-        sync: false  # Set manually in Render dashboard
+        sync: false # Set manually in Render dashboard
       - key: RAPIDAPI_HOST
         value: cricbuzz-cricket.p.rapidapi.com
       - key: MONGO_URL
@@ -25,7 +28,7 @@ services:
       - key: LOG_LEVEL
         value: INFO
     healthCheckPath: /api/health
-    
+
   # Frontend
   - type: web
     name: ipl-frontend
@@ -53,4 +56,4 @@ databases:
     user: admin
 
   - name: ipl-redis
-    plan: free  # 25MB free
+    plan: free # 25MB free
