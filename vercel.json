@@ -21,13 +21,5 @@
       "src": "/(.*)",
       "dest": "/frontend/$1"
     }
-  ],
-  "env": {
-    "REACT_APP_BACKEND_URL": "@backend-url"
-  },
-  "build": {
-    "env": {
-      "REACT_APP_BACKEND_URL": "@backend-url"
-    }
-  }
+  ]
 }
