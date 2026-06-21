@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "name": "ipl-predictions-frontend",
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ],
+  "env": {
+    "REACT_APP_BACKEND_URL": "@backend-url"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_BACKEND_URL": "@backend-url"
+    }
+  }
+}

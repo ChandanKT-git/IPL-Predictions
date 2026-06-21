@@ -10,12 +10,14 @@
 
 ## 📚 Documentation
 
-**Comprehensive documentation is available in the `/docs` folder:**
+**Current project documentation:**
 
-- **[📖 Architecture](docs/ARCHITECTURE.md)** - System design, data flow, component architecture
-- **[🤖 Model Documentation](docs/MODEL_DOCUMENTATION.md)** - ML pipeline, feature engineering, model decisions
-- **[🔌 API Reference](docs/API_REFERENCE.md)** - Complete API endpoint documentation
-- **[💻 Development Guide](docs/DEVELOPMENT_GUIDE.md)** - Setup, workflow, testing, contributing
+- **[📖 Architecture](docs/ARCHITECTURE.md)** - System design and component flow
+- **[🤖 Model Documentation](docs/MODEL_DOCUMENTATION.md)** - ML pipeline and evaluation
+- **[🔌 API Reference](docs/API_REFERENCE.md)** - Backend routes and payloads
+- **[💻 Development Guide](docs/DEVELOPMENT_GUIDE.md)** - Local setup, testing, and development
+- **[🚀 Deploy Now](DEPLOY_NOW.md)** - Practical deployment checklist
+- **[🎯 Deploy for Recruiters](DEPLOY_FOR_RECRUITERS.md)** - Live demo deployment notes
 
 ---
 
@@ -25,7 +27,8 @@
 - Python 3.9+
 - Node.js 16+
 - MongoDB 6.0+
-- Redis 7.0+
+- Cricbuzz RapidAPI key
+- Groq API key for AI analysis (optional)
 
 ### Installation
 
@@ -67,9 +70,6 @@ cp .env.example .env
 # Start MongoDB
 mongod --dbpath ./data/db
 
-# Start Redis
-redis-server
-
 # Start Backend (Terminal 1)
 cd backend
 python -m uvicorn server:app --reload --port 8000
@@ -110,10 +110,10 @@ npm start
 - Upcoming match schedule
 
 ### 💾 **Intelligent Caching**
-- **Redis-based caching** with TTL strategy
-- **In-memory fallback** when Redis unavailable
+- **In-process TTL cache** for live Cricbuzz payloads and resolved catalog data
 - **Graceful degradation** (live → cache → fallback)
 - Source tracking (`X-Data-Source` header)
+- No external Redis dependency in the current runtime
 
 ### 📈 **Analytics & Insights**
 - **Feature Contributions** (SHAP-style importance)
@@ -154,10 +154,10 @@ npm start
        │
   ┌────┴─────┬──────────┬──────────┐
   ▼          ▼          ▼          ▼
-┌────┐   ┌──────┐   ┌──────┐   ┌────────┐
-│ ML │   │Redis │   │Mongo │   │Cricbuzz│
-│Model│   │Cache │   │  DB  │   │  API   │
-└────┘   └──────┘   └──────┘   └────────┘
+┌────┐   ┌────────────┐   ┌──────┐   ┌────────┐
+│ ML │   │ In-Process │   │Mongo │   │Cricbuzz│
+│Model│   │ TTL Cache  │   │  DB  │   │  API   │
+└────┘   └────────────┘   └──────┘   └────────┘
 ```
 
 **For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
@@ -308,15 +308,16 @@ npm test -- --coverage
 ```bash
 # Cricbuzz API (RapidAPI)
 CRICBUZZ_API_KEY=your_api_key_here
-RAPIDAPI_HOST=cricbuzz-cricket.p.rapidapi.com
 
 # Database
 MONGO_URL=mongodb://localhost:27017
-DB_NAME=ipl_predictions
-REDIS_URL=redis://localhost:6379
+DB_NAME=ipl_predictor
 
 # Optional: AI Analysis
 GROQ_API_KEY=your_groq_key_here
+
+# Allowed frontend origin(s)
+CORS_ORIGINS=http://localhost:3000
 ```
 
 #### Frontend (`.env`)
@@ -354,9 +355,9 @@ REACT_APP_BACKEND_URL=http://localhost:8000
 ## 🛠️ Tech Stack
 
 ### Backend
-- **Framework**: FastAPI 0.104+
-- **ML**: scikit-learn 1.3+, pandas, numpy
-- **Database**: MongoDB (motor), Redis
+- **Framework**: FastAPI
+- **ML**: scikit-learn, pandas, numpy, joblib
+- **Database**: MongoDB (motor)
 - **API Client**: httpx (async)
 - **Testing**: pytest
 - **Logging**: Python logging (JSON format)
@@ -372,8 +373,8 @@ REACT_APP_BACKEND_URL=http://localhost:8000
 ### Infrastructure
 - **Server**: Uvicorn (ASGI)
 - **Database**: MongoDB 6.0+
-- **Cache**: Redis 7.0+
-- **Deployment**: Docker (optional)
+- **Cache**: In-process TTL cache
+- **Deployment**: Render/Vercel or Docker (optional)
 
 ---
 
@@ -384,7 +385,7 @@ REACT_APP_BACKEND_URL=http://localhost:8000
 - ✅ Input validation (Pydantic)
 - ✅ CORS configuration
 - ✅ MongoDB authentication
-- ✅ Redis password protection
+- ✅ Environment-based API key handling
 - ⚠️ Rate limiting (recommended for production)
 
 ---

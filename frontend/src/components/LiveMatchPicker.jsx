@@ -65,14 +65,14 @@ export const LiveMatchPicker = ({ onSelectMatch }) => {
     () => (m) => (
       <button
         key={m.matchInfo.matchId}
-        onClick={() => onSelectMatch(m)}
+        onClick={() => onSelectMatch(m, tab)}
         className="w-full flex items-center justify-between p-4 rounded-xl glass border border-white/5 hover:border-[#FF3B30]/40 hover:bg-[#FF3B30]/5 transition-all text-left group"
       >
         <div>
           <div className="text-[10px] text-white/40 uppercase tracking-widest mb-1">
             {m.matchInfo.venueInfo?.ground}, {m.matchInfo.venueInfo?.city}
           </div>
-          <div className="flex items-center gap-3 font-heading uppercase text-sm">
+          <div className="flex gap-3 items-center text-sm uppercase font-heading">
             <span>{m.matchInfo.team1?.teamName}</span>
             <span className="text-white/20">VS</span>
             <span>{m.matchInfo.team2?.teamName}</span>
@@ -88,7 +88,7 @@ export const LiveMatchPicker = ({ onSelectMatch }) => {
             </div>
           )}
           {tab === "upcoming" && (
-            <div className="mt-1 text-xs font-mono text-white/50">
+            <div className="mt-1 font-mono text-xs text-white/50">
               {formatStartTime(m.matchInfo.startDate)}
             </div>
           )}
@@ -110,8 +110,8 @@ export const LiveMatchPicker = ({ onSelectMatch }) => {
       </button>
 
       {expanded && (
-        <div className="mt-4 max-w-xl mx-auto space-y-3 animate-fade-down">
-          <div className="flex justify-center gap-2 mb-2">
+        <div className="mx-auto mt-4 space-y-3 max-w-xl animate-fade-down">
+          <div className="flex gap-2 justify-center mb-2">
             {[
               { id: "live", icon: <RadioTower className="w-3 h-3" />, label: "Live" },
               { id: "upcoming", icon: <Calendar className="w-3 h-3" />, label: "Upcoming" },
@@ -131,11 +131,11 @@ export const LiveMatchPicker = ({ onSelectMatch }) => {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-8 text-white/40 text-xs font-mono">
-              <Loader2 className="w-4 h-4 animate-spin mr-2" /> SCANNING AIRWAVES...
+            <div className="flex justify-center items-center py-8 font-mono text-xs text-white/40">
+              <Loader2 className="mr-2 w-4 h-4 animate-spin" /> SCANNING AIRWAVES...
             </div>
           ) : matches.length === 0 ? (
-            <div className="text-center py-8 text-white/40 text-xs font-mono border border-dashed border-white/10 rounded-xl">
+            <div className="py-8 font-mono text-xs text-center rounded-xl border border-dashed text-white/40 border-white/10">
               {tab === "upcoming"
                 ? "NO UPCOMING IPL MATCHES SCHEDULED."
                 : "NO LIVE IPL MATCHES DETECTED RIGHT NOW."}

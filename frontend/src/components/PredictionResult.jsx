@@ -18,10 +18,8 @@ import {
   Target,
 } from "lucide-react";
 
-const LiveScoreTicker = ({ matchId }) => {
-  const { score, status } = useLiveScoreStream(matchId);
-
-  if (!matchId || !score) return null;
+const LiveScoreTicker = ({ score, status }) => {
+  if (!score) return null;
 
   return (
     <div className="flex items-center gap-3 px-4 py-2 bg-[#FF3B30]/10 border border-[#FF3B30]/20 rounded-full animate-fade-in">
@@ -31,7 +29,7 @@ const LiveScoreTicker = ({ matchId }) => {
       <span className="text-[10px] font-heading uppercase tracking-widest text-[#FF3B30]">
         {status === "open" ? "Live Score" : "Last Known"}
       </span>
-      <div className="flex items-center gap-2 text-xs font-mono">
+      <div className="flex gap-2 items-center font-mono text-xs">
         <span>{score.batTeamScore}</span>
         <span className="text-white/20">|</span>
         <span className="text-white/60">{score.status}</span>
@@ -42,14 +40,14 @@ const LiveScoreTicker = ({ matchId }) => {
 
 const StatCard = ({ label, value, suffix, decimals = 0, accent, testid, sublabel }) => (
   <div
-    className="rounded-xl glass p-5 grain card-lift"
+    className="p-5 rounded-xl glass grain card-lift"
     style={{ borderTop: `2px solid ${accent || "rgba(255,255,255,0.15)"}` }}
     data-testid={testid}
   >
     <div className="text-[10px] tracking-[0.3em] uppercase text-white/45">
       {label}
     </div>
-    <div className="mt-3 font-heading text-5xl tracking-tighter">
+    <div className="mt-3 text-5xl tracking-tighter font-heading">
       <AnimatedCounter
         value={value || 0}
         decimals={decimals}
@@ -69,7 +67,7 @@ const ProbabilityBar = ({ teamA, teamB, probA }) => (
       <span>Win Probability</span>
       <span>{teamB.short_name}</span>
     </div>
-    <div className="mt-3 h-3 rounded-full overflow-hidden bg-white/5 border border-white/10 flex">
+    <div className="flex overflow-hidden mt-3 h-3 rounded-full border bg-white/5 border-white/10">
       <div
         className="h-full transition-all duration-1000 ease-out"
         style={{ width: `${probA}%`, background: teamA.primary_color }}
@@ -79,7 +77,7 @@ const ProbabilityBar = ({ teamA, teamB, probA }) => (
         style={{ width: `${100 - probA}%`, background: teamB.primary_color }}
       />
     </div>
-    <div className="mt-2 flex items-center justify-between font-heading text-2xl tabular">
+    <div className="flex justify-between items-center mt-2 text-2xl font-heading tabular">
       <span style={{ color: teamA.primary_color }}>{probA}%</span>
       <span style={{ color: teamB.primary_color }}>{100 - probA}%</span>
     </div>
@@ -94,7 +92,7 @@ const PhaseBar = ({ label, value, total, color }) => {
         <span>{label}</span>
         <span className="font-mono text-white/70">{value} runs</span>
       </div>
-      <div className="mt-2 h-2 rounded-full bg-white/5 overflow-hidden">
+      <div className="overflow-hidden mt-2 h-2 rounded-full bg-white/5">
         <div
           className="h-full transition-all duration-1000 ease-out"
           style={{ width: `${pct}%`, background: color }}
@@ -107,7 +105,7 @@ const PhaseBar = ({ label, value, total, color }) => {
 const MatchupTable = ({ matchups }) => {
   if (!matchups || matchups.length === 0) return null;
   return (
-    <div className="rounded-xl glass p-6 grain mt-6">
+    <div className="p-6 mt-6 rounded-xl glass grain">
       <div className="flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-white/45 mb-4">
         <Target className="w-3 h-3 text-[#FF3B30]" /> Key Batter–Bowler Matchups
       </div>
@@ -115,12 +113,12 @@ const MatchupTable = ({ matchups }) => {
         <table className="w-full text-xs">
           <thead className="text-[10px] uppercase tracking-widest text-white/40">
             <tr>
-              <th className="text-left py-2">Batter</th>
-              <th className="text-left py-2">Bowler</th>
-              <th className="text-right py-2">Balls</th>
-              <th className="text-right py-2">Runs</th>
-              <th className="text-right py-2">Wkts</th>
-              <th className="text-right py-2">SR</th>
+              <th className="py-2 text-left">Batter</th>
+              <th className="py-2 text-left">Bowler</th>
+              <th className="py-2 text-right">Balls</th>
+              <th className="py-2 text-right">Runs</th>
+              <th className="py-2 text-right">Wkts</th>
+              <th className="py-2 text-right">SR</th>
             </tr>
           </thead>
           <tbody className="font-mono text-white/80">
@@ -145,11 +143,11 @@ const SliderRow = ({ label, value, max, step, onChange, hint, testid }) => (
   <div data-testid={testid}>
     <div className="flex items-center justify-between text-[10px] tracking-[0.3em] uppercase text-white/45">
       <span>{label}</span>
-      <span className="font-mono text-white/70 normal-case tracking-normal">
+      <span className="font-mono tracking-normal normal-case text-white/70">
         {hint}
       </span>
     </div>
-    <div className="mt-3 flex items-center gap-4">
+    <div className="flex gap-4 items-center mt-3">
       <Slider
         value={[value]}
         max={max}
@@ -157,7 +155,7 @@ const SliderRow = ({ label, value, max, step, onChange, hint, testid }) => (
         onValueChange={(v) => onChange(Number(v[0]))}
         className="flex-1"
       />
-      <span className="font-heading text-3xl tabular w-16 text-right">{value}</span>
+      <span className="w-16 text-3xl text-right font-heading tabular">{value}</span>
     </div>
   </div>
 );
@@ -313,8 +311,8 @@ export const PredictionResult = ({
   };
 
   return (
-    <section className="relative max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-14">
-      <div className="mb-6 flex justify-end">
+    <section className="relative px-6 py-10 mx-auto max-w-7xl sm:px-8 sm:py-14">
+      <div className="flex justify-end mb-6">
         <button
           onClick={handleShare}
           className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF3B30]/10 border border-[#FF3B30]/30 text-[#FF3B30] hover:bg-[#FF3B30]/20 transition-all text-xs font-heading uppercase tracking-widest"
@@ -323,43 +321,43 @@ export const PredictionResult = ({
         </button>
       </div>
 
-      <div className="rounded-2xl overflow-hidden relative grain glass p-6 sm:p-10">
+      <div className="overflow-hidden relative p-6 rounded-2xl grain glass sm:p-10">
         <div
           className="absolute inset-0 opacity-30 blur-3xl"
           style={{
             background: `radial-gradient(circle at 20% 50%, ${teamA.primary_color}, transparent 50%), radial-gradient(circle at 80% 50%, ${teamB.primary_color}, transparent 50%)`,
           }}
         />
-        <div className="relative grid grid-cols-3 items-center gap-4">
-          <div className="flex items-center gap-4">
+        <div className="grid relative grid-cols-3 gap-4 items-center">
+          <div className="flex gap-4 items-center">
             <TeamLogo team={teamA} size={84} />
             <div className="hidden sm:block">
               <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
                 Team A
               </div>
-              <div className="font-heading text-2xl uppercase tracking-wider">
+              <div className="text-2xl tracking-wider uppercase font-heading">
                 {teamA.short_name}
               </div>
             </div>
           </div>
           <div className="text-center">
-            <LiveScoreTicker matchId={liveMatchId} />
+            <LiveScoreTicker score={liveStreamScore} status={liveStreamScore ? "open" : "closed"} />
             <div className="text-[10px] tracking-[0.4em] uppercase text-white/40 mt-3">
               Match Preview
             </div>
-            <div className="font-heading text-5xl sm:text-6xl tracking-tighter mt-1">
+            <div className="mt-1 text-5xl tracking-tighter font-heading sm:text-6xl">
               VS
             </div>
-            <div className="text-xs text-white/55 mt-1">
+            <div className="mt-1 text-xs text-white/55">
               {venueName} · {pitchLabel}
             </div>
           </div>
-          <div className="flex items-center gap-4 justify-end">
-            <div className="hidden sm:block text-right">
+          <div className="flex gap-4 justify-end items-center">
+            <div className="hidden text-right sm:block">
               <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
                 Team B
               </div>
-              <div className="font-heading text-2xl uppercase tracking-wider">
+              <div className="text-2xl tracking-wider uppercase font-heading">
                 {teamB.short_name}
               </div>
             </div>
@@ -368,25 +366,25 @@ export const PredictionResult = ({
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
+      <div className="grid grid-cols-2 gap-4 mt-6 lg:grid-cols-4 stagger">
         {summaryCards.map((c) => (
           <StatCard key={c.label} {...c} />
         ))}
       </div>
 
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 rounded-xl glass p-6 sm:p-8 grain">
+      <div className="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-3">
+        <div className="p-6 rounded-xl lg:col-span-2 glass sm:p-8 grain">
           <ProbabilityBar teamA={teamA} teamB={teamB} probA={probA} />
 
           {h2h && h2h.total_matches > 0 && (
             <div className="mt-8 rounded-2xl bg-white/5 p-6 border-l-4 border-[#FF3B30]">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex gap-3 items-center mb-6">
                 <Activity className="w-5 h-5 text-[#FF3B30]" />
-                <h3 className="font-heading text-xl uppercase tracking-tight">
+                <h3 className="text-xl tracking-tight uppercase font-heading">
                   Real Historical Insights
                 </h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                 <div className="space-y-1">
                   <div className="text-[10px] tracking-widest uppercase text-white/40">
                     Total Encounters
@@ -399,7 +397,7 @@ export const PredictionResult = ({
                   </div>
                   <div className="text-3xl font-heading">
                     {h2h.avg_score?.toFixed(1)}{" "}
-                    <span className="text-xs text-white/40 font-mono uppercase tracking-normal">
+                    <span className="font-mono text-xs tracking-normal uppercase text-white/40">
                       runs
                     </span>
                   </div>
@@ -415,8 +413,8 @@ export const PredictionResult = ({
                         <div
                           key={i}
                           className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold border ${isA
-                            ? "bg-blue-500/20 border-blue-500/40 text-blue-400"
-                            : "bg-orange-500/20 border-orange-500/40 text-orange-400"
+                            ? "text-blue-400 bg-blue-500/20 border-blue-500/40"
+                            : "text-orange-400 bg-orange-500/20 border-orange-500/40"
                             }`}
                           title={`Winner: ${m.winner} (${m.year})`}
                         >
@@ -428,8 +426,8 @@ export const PredictionResult = ({
                 </div>
               </div>
               {h2h.venue_record && (
-                <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/60">
-                  <span className="font-heading uppercase tracking-widest text-white/40">
+                <div className="pt-4 mt-6 text-xs border-t border-white/10 text-white/60">
+                  <span className="tracking-widest uppercase font-heading text-white/40">
                     {venueName} record:
                   </span>{" "}
                   {h2h.venue_record.matches} matches · {teamA.short_name}{" "}
@@ -440,7 +438,7 @@ export const PredictionResult = ({
             </div>
           )}
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
             <PhaseBar
               label="Powerplay (1-6)"
               value={phase.powerplay_runs}
@@ -461,7 +459,7 @@ export const PredictionResult = ({
             />
           </div>
           <div
-            className="mt-6 p-4 rounded-md bg-white/5 border border-white/10 font-heading text-sm uppercase tracking-widest"
+            className="p-4 mt-6 text-sm tracking-widest uppercase rounded-md border bg-white/5 border-white/10 font-heading"
             data-testid="match-outcome"
           >
             <span className="text-[#FF3B30] mr-2">▶</span>
@@ -472,7 +470,7 @@ export const PredictionResult = ({
           </div>
         </div>
 
-        <div className="rounded-xl glass p-6 sm:p-8 grain relative overflow-hidden">
+        <div className="overflow-hidden relative p-6 rounded-xl glass sm:p-8 grain">
           <div className="flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-white/45">
             <Sparkles className="w-3 h-3 text-[#FF3B30]" />
             AI Match Preview
@@ -485,7 +483,7 @@ export const PredictionResult = ({
             data-testid="ai-analysis"
           >
             {analysis.loading ? (
-              <span className="flex items-center gap-2 text-white/50">
+              <span className="flex gap-2 items-center text-white/50">
                 <Loader2 className="w-4 h-4 animate-spin" /> Drafting commentary…
               </span>
             ) : (
@@ -499,24 +497,24 @@ export const PredictionResult = ({
 
       <WhyPanel contributions={prediction.contributions} />
 
-      <div className="mt-6 rounded-xl glass p-6 sm:p-8 grain">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="p-6 mt-6 rounded-xl glass sm:p-8 grain">
+        <div className="flex flex-wrap gap-3 justify-between items-center">
           <div>
             <div className="flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-white/45">
               <Activity className="w-3 h-3 text-[#FF3B30]" /> Live What-If
             </div>
-            <h3 className="mt-1 font-heading text-2xl uppercase tracking-tight">
+            <h3 className="mt-1 text-2xl tracking-tight uppercase font-heading">
               Simulate live match state
             </h3>
           </div>
-          <div className="flex items-center gap-2 text-xs text-white/50">
+          <div className="flex gap-2 items-center text-xs text-white/50">
             <TrendingUp className="w-4 h-4" />
             Slide to project {battingTeam.short_name}'s finish
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
             <SliderRow
               label="Overs Bowled"
               value={overs}
@@ -554,13 +552,13 @@ export const PredictionResult = ({
               Live Projection
             </div>
             <div
-              className="mt-3 font-heading text-6xl tabular leading-none"
+              className="mt-3 text-6xl leading-none font-heading tabular"
               style={{ color: accent }}
               data-testid="live-projection"
             >
               <AnimatedCounter value={projected} />
             </div>
-            <div className="mt-3 text-xs text-white/55 font-mono">
+            <div className="mt-3 font-mono text-xs text-white/55">
               {whatIf ? (
                 <>
                   RRR {whatIf.required_run_rate} · CRR {whatIf.current_run_rate}
@@ -573,9 +571,9 @@ export const PredictionResult = ({
             <div className="mt-4 text-[10px] tracking-[0.3em] uppercase text-white/40">
               Updated Win Prob
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-2 font-heading text-2xl">
+            <div className="grid grid-cols-2 gap-2 mt-2 text-2xl font-heading">
               <div
-                className="rounded-md p-3 text-center"
+                className="p-3 text-center rounded-md"
                 style={{ background: `${battingTeam.primary_color}22`, color: battingTeam.primary_color }}
               >
                 {battingTeam.short_name} <br />
@@ -584,7 +582,7 @@ export const PredictionResult = ({
                 </span>
               </div>
               <div
-                className="rounded-md p-3 text-center"
+                className="p-3 text-center rounded-md"
                 style={{ background: `${bowlingTeam.primary_color}22`, color: bowlingTeam.primary_color }}
               >
                 {bowlingTeam.short_name} <br />
@@ -602,7 +600,7 @@ export const PredictionResult = ({
         </div>
       </div>
 
-      <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap gap-3 justify-between items-center mt-10">
         <button
           onClick={onBack}
           data-testid="result-back-btn"

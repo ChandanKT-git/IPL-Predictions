@@ -1,0 +1,56 @@
+# Render Blueprint for IPL Predictions
+# Deploy full-stack app with one click: https://render.com
+
+services:
+  # Backend API
+  - type: web
+    name: ipl-backend
+    runtime: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: CRICBUZZ_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: RAPIDAPI_HOST
+        value: cricbuzz-cricket.p.rapidapi.com
+      - key: MONGO_URL
+        fromDatabase:
+          name: ipl-mongodb
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: ipl-redis
+          type: redis
+          property: connectionString
+      - key: LOG_LEVEL
+        value: INFO
+    healthCheckPath: /api/health
+    
+  # Frontend
+  - type: web
+    name: ipl-frontend
+    runtime: node
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        fromService:
+          name: ipl-backend
+          type: web
+          property: host
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: ipl-mongodb
+    databaseName: ipl_predictions
+    user: admin
+
+  - name: ipl-redis
+    plan: free  # 25MB free
