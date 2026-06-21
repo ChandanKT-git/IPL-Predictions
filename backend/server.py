@@ -178,6 +178,30 @@ async def root() -> dict:
     return {"message": "IPL Score Predictor API", "version": app.version}
 
 
+@app.get("/health")
+async def root_health() -> JSONResponse:
+    """Redirect health check to /api/health."""
+    mongo_ok = False
+    try:
+        await mongo_client.admin.command("ping")
+        mongo_ok = True
+    except Exception as exc:
+        logger.warning("Mongo health check failed: %s", exc)
+
+    return JSONResponse(
+        {
+            "status": "ok" if mongo_ok else "degraded",
+            "subsystems": {
+                "mongo": mongo_ok,
+                "cricbuzz_key_set": bool(cricbuzz and cricbuzz.has_api_key),
+                "model_loaded": predictor.is_ready,
+                "model_version": predictor.version,
+                "csv_loaded": data_manager.is_loaded,
+                "cache_entries": len(cache._store),
+            },
+        }
+    )
+
 @api_router.get("/health")
 async def health() -> JSONResponse:
     """Liveness + readiness probe.
