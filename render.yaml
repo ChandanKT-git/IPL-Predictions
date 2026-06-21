@@ -20,11 +20,6 @@ services:
         fromDatabase:
           name: ipl-mongodb
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: ipl-redis
-          type: redis
-          property: connectionString
       - key: LOG_LEVEL
         value: INFO
     healthCheckPath: /api/health
@@ -54,6 +49,3 @@ databases:
   - name: ipl-mongodb
     databaseName: ipl_predictions
     user: admin
-
-  - name: ipl-redis
-    plan: free # 25MB free
